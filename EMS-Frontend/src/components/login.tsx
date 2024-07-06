@@ -14,6 +14,8 @@ const Login = () => {
     password: "",
   });
 
+  const [error, setError] = useState(null);
+
   const navigate = useNavigate();
   axios.defaults.withCredentials = true;
 
@@ -28,8 +30,12 @@ const Login = () => {
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     axios.post('http://localhost:3000/auth/admin-login', loginDetails)
-      .then(() => {
-        navigate('/dashboard')
+      .then((result) => {
+        if (result.data.loginStatus) {
+          navigate('/dashboard')
+        } else {
+          setError(result.data.Error)
+        }        
       })
       .catch((err) => console.log(err))
   };
@@ -37,6 +43,7 @@ const Login = () => {
   return (
     <div className="loginPage">
       <div className="loginForm">
+        <div className="font-bold text-red-500">{error && error}</div>
         <h2 className="text-2xl font-bold mb-6 text-center">Login Form</h2>
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
