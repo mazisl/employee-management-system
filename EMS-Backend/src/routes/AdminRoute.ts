@@ -27,4 +27,20 @@ router.post('/admin-login', (req, res) => {
   });
 });
 
+router.get('/category', (req, res) => {
+  const sql = 'SELECT * FROM category';
+  dbCon.query(sql, (err, result) => {
+    if (err) return res.json({Status: false, Error: 'Query Error'})
+    return res.json({Status: true, Result: result})
+  })
+})
+
+router.post('/add-category', (req, res) => {
+  const sql = 'INSERT INTO category (`name`) VALUES (?)';
+  dbCon.query(sql, [req.body.category], (err, result) => {
+    if (err) return res.json({Status: false, Error: 'Query Error'})
+    return res.json({Status: true})
+  })
+})
+
 export { router as adminRouter };
