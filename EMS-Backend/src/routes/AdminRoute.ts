@@ -83,4 +83,45 @@ router.post('/add-employee', upload.single('image'), (req, res) => {
   })
 })
 
+router.get('/employee', (req, res) => {
+  const sql = 'SELECT * FROM employee';
+  dbCon.query(sql, (err, result) => {
+    if (err) return res.json({Status: false, Error: 'Query Error'})
+    return res.json({Status: true, Result: result})
+  })
+})
+
+router.get('/employee/:id', (req, res) => {
+  const id = req.params.id;
+  const sql = 'SELECT * FROM employee WHERE id = ?';
+  dbCon.query(sql, [id], (err, result) => {
+    if (err) return res.json({Status: false, Error: 'Query Error'})
+    return res.json({Status: true, Result: result})
+  })
+})
+
+router.put('/edit-employee/:id', (req, res) => {
+  const id = req.params.id;
+  const sql = 'UPDATE employee set name = ?, email = ?, salary = ?, category_id = ? WHERE id = ?';
+  const values = [
+    req.body.name,
+    req.body.email,
+    req.body.salary,
+    req.body.category_id
+  ]
+  dbCon.query(sql, [...values, id], (err, result) => {
+    if (err) return res.json({Status: false, Error: 'Query Error'+err})
+    return res.json({Status: true, Result: result})
+  })
+})
+
+router.delete('/delete-employee/:id', (req, res) => {
+  const id = req.params.id;
+  const sql = 'DELETE FROM employee WHERE id = ?';
+  dbCon.query(sql, [id], (err, result) => {
+    if (err) return res.json({Status: false, Error: 'Query Error'+err})
+    return res.json({Status: true, Result: result})
+  })
+})
+
 export { router as adminRouter };

@@ -2,6 +2,7 @@ import AddCategory from "./components/addCategory";
 import AddEmployee from "./components/addEmployee";
 import Category from "./components/category";
 import Dashboard from "./components/dashboard";
+import EditEmployee from "./components/editEmployee";
 import Employee from "./components/employee";
 import Home from "./components/home";
 import Login from "./components/login";
@@ -18,8 +19,9 @@ const App = () => {
           <Route path="/dashboard/employee" element={<Employee />}></Route>
           <Route path="/dashboard/category" element={<Category />}></Route>
           <Route path="/dashboard/profile" element={<Profile />}></Route>
-          <Route path="/dashboard/add-category" element={<AddCategory />}></Route>          
+          <Route path="/dashboard/add-category" element={<AddCategory />}></Route>
           <Route path="/dashboard/add-employee" element={<AddEmployee />}></Route>
+          <Route path="/dashboard/edit-employee/:id" element={<EditEmployee />}></Route>
         </Route>
       </Routes>   
     </>

@@ -1,78 +1,74 @@
+import { useNavigate, useParams } from "react-router-dom";
+import { useEffect, useState, ChangeEvent, FormEvent } from "react";
 import axios from "axios";
-import { ChangeEvent, FormEvent, useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 
-interface JCategory {
-  name: string;
-  ID: number;
-}
-
-export interface TEmployee {
+interface TEmployeeDetailsEdit {
   name: string;
   email: string;
-  password: string;
   salary: string;
   category_id: string;
-  image: File | null;
 }
 
-const AddEmployee = () => {
+export interface Category {
+  ID: number;
+  name: string;
+}
 
-  const [employee, setEmployee] = useState<TEmployee>({
+const EditEmployee = () => {
+
+  const [employeeDetails, setEmployeeDetails] = useState<TEmployeeDetailsEdit>({
     name: "",
     email: "",
-    password: "",
     salary: "",
-    category_id: "",
-    image: null
+    category_id: ""
   });
+  console.log(employeeDetails)
 
-  const [jobCategory, setJobCategory] = useState<JCategory[]>([]);
+  const [jobCategory, setJobCategory] = useState<Category[]>([]);
+  console.log(jobCategory);
 
   const navigate = useNavigate();
 
+  const {id} = useParams();
+
   useEffect(() => {
-    axios
-      .get("http://localhost:3000/auth/category")
-      .then((result) => {
-        if (result.data.Status) {
-          setJobCategory(result.data.Result);
-        } else {
-          alert(result.data.Error);
-        }
+    axios.get('http://localhost:3000/auth/category')
+    .then(result => {
+      if (result.data.Status) {
+        setJobCategory(result.data.Result)
+      } else {
+        alert(result.data.Error)
+      }
+    })
+    .catch(err => console.log(err))
+
+    axios.get('http://localhost:3000/auth/employee/'+id)
+      .then(result => {
+        setEmployeeDetails({
+          ...employeeDetails,
+          name: result.data.Result[0].name,
+          email: result.data.Result[0].email,
+          salary: result.data.Result[0].salary,
+          category_id: result.data.Result[0].category_id
+        })
       })
-      .catch((err) => console.log(err));
-  }, []);
+      .catch(err => console.log(err))
+  }, [])
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setEmployee({ ...employee, [name]: value });
+    setEmployeeDetails({ ...employeeDetails, [name]: value });
   };
 
   const handleSelectChange = (e: ChangeEvent<HTMLSelectElement>) => {
     const { name, value } = e.target;
     console.log(`Selected value: ${value}`);
-    setEmployee({ ...employee, [name]: value });
-  };
-
-  const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files.length > 0) {
-      setEmployee({ ...employee, image: e.target.files[0] });
-    }
+    setEmployeeDetails({ ...employeeDetails, [name]: value });
   };
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const formData = new FormData();
-    formData.append('name', employee.name);
-    formData.append('email', employee.email);
-    formData.append('password', employee.password);
-    formData.append('salary', employee.salary);
-    formData.append('category_id', employee.category_id);
-    if (employee.image) {
-      formData.append('image', employee.image);
-    }
-    axios.post('http://localhost:3000/auth/add-employee', formData)
+    axios.put('http://localhost:3000/auth/edit-employee/'+id, employeeDetails)
       .then(result => {
         if (result.data.Status) {
           navigate('/dashboard/employee')
@@ -86,7 +82,7 @@ const AddEmployee = () => {
   return (
     <div className="flex items-center justify-center mt-6">
       <div className="p-8 rounded shadow-md w-full max-w-sm border-4 border-gray-100">
-        <h2 className="text-2xl font-bold mb-6 text-center">Add Employee</h2>
+        <h2 className="text-2xl font-bold mb-6 text-center">Edit Employee</h2>
 
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
@@ -98,6 +94,7 @@ const AddEmployee = () => {
               type="text"
               name="name"
               placeholder="Enter Name"
+              value={employeeDetails.name}
               onChange={handleInputChange}
             ></input>
           </div>
@@ -111,19 +108,7 @@ const AddEmployee = () => {
               type="email"
               name="email"
               placeholder="Enter Email"
-              onChange={handleInputChange}
-            ></input>
-          </div>
-
-          <div className="mb-4">
-            <label htmlFor="password" className="block font-bold mb-2">
-              Password
-            </label>
-            <input
-              className="inputField focus"
-              type="password"
-              name="password"
-              placeholder="Enter Password"
+              value={employeeDetails.email}
               onChange={handleInputChange}
             ></input>
           </div>
@@ -137,6 +122,7 @@ const AddEmployee = () => {
               type="text"
               name="salary"
               placeholder="Enter Salary"
+              value={employeeDetails.salary}
               onChange={handleInputChange}
             ></input>
           </div>
@@ -149,7 +135,6 @@ const AddEmployee = () => {
               id="jobType"
               className="inputField cursor-pointer bg-white border-gray-300 py-2 px-4 pr-8 focus"
               name="category_id" 
-              value={employee.category_id}
               onChange={handleSelectChange}
             >
               <option value="" disabled>Select Job Category</option>
@@ -163,26 +148,13 @@ const AddEmployee = () => {
             </select>
           </div>
 
-          <div className="mb-4">
-            <label htmlFor="imgFile" className="block font-bold mb-2">
-              Select Image
-            </label>
-            <input
-              id="imgFile"
-              className="inputField focus"
-              type="file"
-              name="image"
-              onChange={handleFileChange}
-            />
-          </div>
-
           <button className="btn" type="submit">
-            Add Employee
+            Edit Employee
           </button>
         </form>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default AddEmployee;
+export default EditEmployee;
