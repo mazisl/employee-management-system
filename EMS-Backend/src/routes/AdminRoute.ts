@@ -2,6 +2,9 @@ import express from "express";
 import dbCon from "../utils/db";
 import jwt from "jsonwebtoken";
 import { RowDataPacket } from 'mysql2';
+import bcrypt from 'bcrypt';
+import multer from 'multer';
+import path from 'path';
 
 const router = express.Router();
 
@@ -40,6 +43,43 @@ router.post('/add-category', (req, res) => {
   dbCon.query(sql, [req.body.category], (err, result) => {
     if (err) return res.json({Status: false, Error: 'Query Error'})
     return res.json({Status: true})
+  })
+})
+
+//image upload start
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, 'public/images')
+  },
+  filename: (req, file, cb) => {
+    cb(null, file.fieldname + "_" + Date.now() + path.extname(file.originalname))
+  }
+})
+
+const upload = multer({
+  storage: storage
+})
+//image upload end
+
+router.post('/add-employee', upload.single('image'), (req, res) => {
+  console.log('Received request body:', req.body)
+  const sql = `INSERT INTO employee 
+  (name, email, password, salary, image, category_id)
+   VALUES (?)`;
+  bcrypt.hash(req.body.password, 10, (err, hash) => {
+    if (err) return res.json({Status: false, Error: 'Query Error'})
+    const values = [
+      req.body.name,
+      req.body.email,
+      hash,
+      req.body.salary,
+      req.file?.filename,
+      req.body.category_id
+    ]
+    dbCon.query(sql, [values], (err, result) => {
+      if (err) return res.json({Status: false, Error: 'Query Error'})
+      return res.json({Status: true})
+    })
   })
 })
 

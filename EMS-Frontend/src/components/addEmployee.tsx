@@ -1,9 +1,10 @@
 import axios from "axios";
-import { ChangeEvent, useEffect, useState } from "react";
+import { ChangeEvent, FormEvent, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 interface JCategory {
   name: string;
-  id: number;
+  ID: number;
 }
 
 interface TEmployee {
@@ -11,21 +12,24 @@ interface TEmployee {
   email: string;
   password: string;
   salary: string;
-  jobType: string;
-  image: string;
+  category_id: string;
+  image: File | null;
 }
 
 const AddEmployee = () => {
+
   const [employee, setEmployee] = useState<TEmployee>({
     name: "",
     email: "",
     password: "",
     salary: "",
-    jobType: "",
-    image: "",
+    category_id: "",
+    image: null
   });
 
   const [jobCategory, setJobCategory] = useState<JCategory[]>([]);
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     axios
@@ -40,12 +44,51 @@ const AddEmployee = () => {
       .catch((err) => console.log(err));
   }, []);
 
+  const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setEmployee({ ...employee, [name]: value });
+  };
+
+  const handleSelectChange = (e: ChangeEvent<HTMLSelectElement>) => {
+    const { name, value } = e.target;
+    console.log(`Selected value: ${value}`);
+    setEmployee({ ...employee, [name]: value });
+  };
+
+  const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files.length > 0) {
+      setEmployee({ ...employee, image: e.target.files[0] });
+    }
+  };
+
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const formData = new FormData();
+    formData.append('name', employee.name);
+    formData.append('email', employee.email);
+    formData.append('password', employee.password);
+    formData.append('salary', employee.salary);
+    formData.append('category_id', employee.category_id);
+    if (employee.image) {
+      formData.append('image', employee.image);
+    }
+    axios.post('http://localhost:3000/auth/add-employee', formData)
+      .then(result => {
+        if (result.data.Status) {
+          navigate('/dashboard/employee')
+        } else {
+          alert(result.data.Error)
+        }
+      })
+      .catch(err => console.log(err))
+  }
+
   return (
     <div className="flex items-center justify-center mt-6">
       <div className="p-8 rounded shadow-md w-full max-w-sm border-4 border-gray-100">
         <h2 className="text-2xl font-bold mb-6 text-center">Add Employee</h2>
 
-        <form >
+        <form onSubmit={handleSubmit}>
           <div className="mb-4">
             <label htmlFor="name" className="block font-bold mb-2">
               Name
@@ -55,9 +98,7 @@ const AddEmployee = () => {
               type="text"
               name="name"
               placeholder="Enter Name"
-              onChange={(e: ChangeEvent<HTMLInputElement>) =>
-                setEmployee({ ...employee, name: e.target.value })
-              }
+              onChange={handleInputChange}
             ></input>
           </div>
 
@@ -70,9 +111,7 @@ const AddEmployee = () => {
               type="email"
               name="email"
               placeholder="Enter Email"
-              onChange={(e: ChangeEvent<HTMLInputElement>) =>
-                setEmployee({ ...employee, email: e.target.value })
-              }
+              onChange={handleInputChange}
             ></input>
           </div>
 
@@ -85,9 +124,7 @@ const AddEmployee = () => {
               type="password"
               name="password"
               placeholder="Enter Password"
-              onChange={(e: ChangeEvent<HTMLInputElement>) =>
-                setEmployee({ ...employee, password: e.target.value })
-              }
+              onChange={handleInputChange}
             ></input>
           </div>
 
@@ -100,27 +137,25 @@ const AddEmployee = () => {
               type="text"
               name="salary"
               placeholder="Enter Salary"
-              onChange={(e: ChangeEvent<HTMLInputElement>) =>
-                setEmployee({ ...employee, salary: e.target.value })
-              }
+              onChange={handleInputChange}
             ></input>
           </div>
 
-          <div className="mb-4">
-            <label htmlFor="employee" className="block font-bold mb-2">
+          <div className="mb-4 relative">
+            <label htmlFor="jobType" className="block font-bold mb-2">
               Job Category
             </label>
             <select
-              id="employee"
-              className="inputField focus"
-              name="employee"
-              onChange={(e: ChangeEvent<HTMLSelectElement>) =>
-                setEmployee({ ...employee, jobType: e.target.value })
-              }
+              id="jobType"
+              className="inputField cursor-pointer bg-white border-gray-300 py-2 px-4 pr-8 focus"
+              name="category_id" 
+              value={employee.category_id}
+              onChange={handleSelectChange}
             >
+              <option value="" disabled>Select Job Category</option>
               {jobCategory.map((jobCat) => {
                 return (
-                  <option key={jobCat.id} value={jobCat.id}>
+                  <option key={jobCat.ID} value={jobCat.ID}>
                     {jobCat.name}
                   </option>
                 );
@@ -136,9 +171,8 @@ const AddEmployee = () => {
               id="imgFile"
               className="inputField focus"
               type="file"
-              onChange={(e: ChangeEvent<HTMLInputElement>) =>
-                setEmployee({ ...employee, image: e.target.value })
-              }
+              name="image"
+              onChange={handleFileChange}
             />
           </div>
 
