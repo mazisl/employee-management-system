@@ -14,8 +14,6 @@ const Employee = () => {
 
   const [employees, setEmployees] = useState<Employee[]>([]);
 
-  // const navigate = useNavigate();
-
   useEffect(() => {
     axios.get('http://localhost:3000/auth/employee')
     .then(result => {
@@ -32,7 +30,6 @@ const Employee = () => {
     axios.delete('http://localhost:3000/auth/delete-employee/'+id)
       .then(result => {
         if (result.data.Status) {
-          // navigate('/dashboard/employee')
           window.location.reload()
         } else {
           alert(result.data.Error)

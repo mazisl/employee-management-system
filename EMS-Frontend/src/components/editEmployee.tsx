@@ -1,6 +1,7 @@
 import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState, ChangeEvent, FormEvent } from "react";
 import axios from "axios";
+import { useAddEmployee } from "../contexts/addEmployee.context";
 
 interface TEmployeeDetailsEdit {
   name: string;
@@ -8,13 +9,9 @@ interface TEmployeeDetailsEdit {
   salary: string;
   category_id: string;
 }
-
-export interface Category {
-  ID: number;
-  name: string;
-}
-
 const EditEmployee = () => {
+
+  const {jobCategory, setJobCategory } = useAddEmployee();
 
   const [employeeDetails, setEmployeeDetails] = useState<TEmployeeDetailsEdit>({
     name: "",
@@ -22,10 +19,6 @@ const EditEmployee = () => {
     salary: "",
     category_id: ""
   });
-  console.log(employeeDetails)
-
-  const [jobCategory, setJobCategory] = useState<Category[]>([]);
-  console.log(jobCategory);
 
   const navigate = useNavigate();
 
@@ -44,13 +37,12 @@ const EditEmployee = () => {
 
     axios.get('http://localhost:3000/auth/employee/'+id)
       .then(result => {
-        setEmployeeDetails({
-          ...employeeDetails,
-          name: result.data.Result[0].name,
-          email: result.data.Result[0].email,
-          salary: result.data.Result[0].salary,
-          category_id: result.data.Result[0].category_id
-        })
+        if (result.data.Status) {
+          const { name, email, salary, category_id } = result.data.Result[0];
+          setEmployeeDetails({ name, email, salary, category_id });
+        } else {
+          alert(result.data.Error);
+        }
       })
       .catch(err => console.log(err))
   }, [])
@@ -134,7 +126,8 @@ const EditEmployee = () => {
             <select
               id="jobType"
               className="inputField cursor-pointer bg-white border-gray-300 py-2 px-4 pr-8 focus"
-              name="category_id" 
+              name="category_id"
+              value={employeeDetails.category_id}
               onChange={handleSelectChange}
             >
               <option value="" disabled>Select Job Category</option>

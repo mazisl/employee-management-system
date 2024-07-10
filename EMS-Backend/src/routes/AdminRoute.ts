@@ -124,4 +124,41 @@ router.delete('/delete-employee/:id', (req, res) => {
   })
 })
 
+router.get('/admin-count', (req, res) => {
+  const sql = "select count(id) as admin from admin";
+  dbCon.query(sql, (err, result) => {
+      if(err) return res.json({Status: false, Error: "Query Error"+err})
+      return res.json({Status: true, Result: result})
+  })
+})
+
+router.get('/employee-count', (req, res) => {
+  const sql = "select count(id) as employee from employee";
+  dbCon.query(sql, (err, result) => {
+      if(err) return res.json({Status: false, Error: "Query Error"+err})
+      return res.json({Status: true, Result: result})
+  })
+})
+
+router.get('/salary-count', (req, res) => {
+  const sql = "select sum(salary) as salary from employee";
+  dbCon.query(sql, (err, result) => {
+      if(err) return res.json({Status: false, Error: "Query Error"+err})
+      return res.json({Status: true, Result: result})
+  })
+})
+
+router.get('/admin-records', (req, res) => {
+  const sql = "select * from admin";
+  dbCon.query(sql, (err, result) => {
+      if(err) return res.json({Status: false, Error: "Query Error"+err})
+      return res.json({Status: true, Result: result})
+  })
+})
+
+router.get('/logout', (req, res) => {
+  res.clearCookie('token');
+  return res.json({Status: true });
+})
+
 export { router as adminRouter };
