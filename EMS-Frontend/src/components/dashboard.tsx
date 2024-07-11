@@ -1,7 +1,6 @@
-import {Link, Outlet} from 'react-router-dom';
+import {Link, Outlet, useNavigate} from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTableColumns, faUsers, faLayerGroup, faCircleUser, faArrowRightFromBracket } from '@fortawesome/free-solid-svg-icons';
-import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 const Dashboard = () => {
@@ -13,7 +12,8 @@ const Dashboard = () => {
     axios.get('http://localhost:3000/auth/logout')
       .then(result => {
         if (result.data.Status) {
-          navigate('/admin-login')
+          localStorage.removeItem('valid')
+          navigate('/')
         }
       })
   }

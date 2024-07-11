@@ -16,7 +16,7 @@ export interface TEmployee {
   image: File | null;
 }
 
-interface AddEmployeeContextProps {
+interface EmployeeContextProps {
   employee: TEmployee;
   setEmployee: (value: TEmployee) => void;
   jobCategory: JCategory[];
@@ -27,9 +27,9 @@ interface AddEmployeeContextProps {
   handleSubmit: (e: FormEvent<HTMLFormElement>) => void;
 }
 
-const AddEmployeeContext = createContext<AddEmployeeContextProps>({} as AddEmployeeContextProps);
+const EmployeeContext = createContext<EmployeeContextProps>({} as EmployeeContextProps);
 
-export const AddEmployeeProvider = ({ children }: {children: ReactNode}) => {
+export const EmployeeProvider = ({ children }: {children: ReactNode}) => {
 
   const [employee, setEmployee] = useState<TEmployee>({
     name: '',
@@ -115,8 +115,8 @@ export const AddEmployeeProvider = ({ children }: {children: ReactNode}) => {
   }
 
   return (
-    <AddEmployeeContext.Provider value={value}>{children}</AddEmployeeContext.Provider>
+    <EmployeeContext.Provider value={value}>{children}</EmployeeContext.Provider>
   );
 };
 
-export const useAddEmployee = () => useContext(AddEmployeeContext);
+export const useEmployee = () => useContext(EmployeeContext);

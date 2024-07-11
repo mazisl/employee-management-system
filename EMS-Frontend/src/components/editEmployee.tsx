@@ -1,7 +1,7 @@
 import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState, ChangeEvent, FormEvent } from "react";
 import axios from "axios";
-import { useAddEmployee } from "../contexts/addEmployee.context";
+import { useEmployee } from "../contexts/employee.context";
 
 interface TEmployeeDetailsEdit {
   name: string;
@@ -11,7 +11,7 @@ interface TEmployeeDetailsEdit {
 }
 const EditEmployee = () => {
 
-  const {jobCategory, setJobCategory } = useAddEmployee();
+  const {jobCategory, setJobCategory } = useEmployee();
 
   const [employeeDetails, setEmployeeDetails] = useState<TEmployeeDetailsEdit>({
     name: "",

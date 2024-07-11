@@ -1,8 +1,8 @@
-import { useAddEmployee } from "../contexts/addEmployee.context";
+import { useEmployee } from "../contexts/employee.context";
 
 const AddEmployee = () => {
 
-  const { employee, jobCategory, handleInputChange, handleSelectChange, handleFileChange, handleSubmit } = useAddEmployee();
+  const { employee, jobCategory, handleInputChange, handleSelectChange, handleFileChange, handleSubmit } = useEmployee();
 
   return (
     <div className="flex items-center justify-center mt-6">

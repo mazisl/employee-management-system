@@ -1,15 +1,15 @@
-import { ChangeEvent, FormEvent, useState } from "react";
 import axios from "axios";
+import { ChangeEvent, FormEvent, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-interface LoginFormDetails {
+interface EmpLoginFormDetails {
   email: string;
   password: string;
 }
 
-const Login = () => {
+const EmployeeLogin = () => {
 
-  const [loginDetails, setLoginDetails] = useState<LoginFormDetails>({
+  const [loginDetails, setLoginDetails] = useState<EmpLoginFormDetails>({
     email: "",
     password: "",
   });
@@ -29,23 +29,23 @@ const Login = () => {
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    axios.post('http://localhost:3000/auth/admin-login', loginDetails)
+    axios.post('http://localhost:3000/employee/employee-login', loginDetails)
       .then((result) => {
         if (result.data.loginStatus) {
           localStorage.setItem('valid', 'true')
-          navigate('/dashboard')
+          navigate('/employee-detail/' + result.data.id)
         } else {
           setError(result.data.Error)
         }        
       })
       .catch((err) => console.log(err))
   };
-
+  
   return (
     <div className="loginPage">
       <div className="loginForm">
         <div className="font-bold text-red-500">{error && error}</div>
-        <h2 className="text-2xl font-bold mb-6 text-center">Admin Login</h2>
+        <h2 className="text-2xl font-bold mb-6 text-center">Employee Login</h2>
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
             <label htmlFor="email" className="block font-bold mb-2"><strong>Email:</strong></label>
@@ -56,11 +56,11 @@ const Login = () => {
             <label htmlFor="password" className="block font-bold mb-2"><strong>Password:</strong></label>
             <input className="inputField focus" type="password" name="password" placeholder="Enter Password" onChange={handlePasswordInputChange}></input>
           </div>
-          <button className="btn" type="submit">Login</button>
+          <button className="btnEmp" type="submit">Login</button>
         </form>
       </div>
     </div>
   )
 }
 
-export default Login;
+export default EmployeeLogin;
