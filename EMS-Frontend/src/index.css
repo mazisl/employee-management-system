@@ -11,12 +11,18 @@
 
 @layer utilities {
   .loginPage {
-    @apply flex items-center justify-center min-h-screen bg-gray-100 bg-cover bg-center;
-    background-image: url('/images/employeems.jpeg');
+    @apply flex items-center justify-center min-h-screen bg-gray-100 bg-cover bg-top;
+    background-image: url('/images/ays-ems-bg.png');
   }
 
   .loginForm {
     @apply p-8 rounded shadow-md text-white w-full max-w-sm;
+    border: 2px solid rgba(255, 255, 255, 0.75);
+    background-color: rgba(1, 32, 93, 0.6);
+  }
+
+  .loginMain {
+    @apply p-8 rounded shadow-md text-white w-3/5;
     border: 2px solid rgba(255, 255, 255, 0.75);
     background-color: rgba(1, 32, 93, 0.6);
   }
