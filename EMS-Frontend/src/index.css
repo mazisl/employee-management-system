@@ -26,6 +26,14 @@
     border: 2px solid rgba(255, 255, 255, 0.75);
     background-color: rgba(1, 32, 93, 0.6);
   }
+
+  .employee-th {
+    @apply px-6 py-3 text-left text-sm font-medium text-gray-500 uppercase tracking-wider;
+  }
+
+  .employee-td {
+    @apply px-6 py-4 whitespace-nowrap;
+  }
 }
 
 @layer components {

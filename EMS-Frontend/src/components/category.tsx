@@ -2,19 +2,19 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom"
 
-export interface Category {
+export interface JobTitle {
   name: string;
 }
 
-const Category = () => {
+const JobTitle = () => {
 
-  const [categories, setCategories] = useState<Category[]>([]);
+  const [jobTitles, setJobTitles] = useState<JobTitle[]>([]);
 
   useEffect(() => {
-    axios.get('http://localhost:3000/auth/category')
+    axios.get('http://localhost:3000/auth/job-title')
     .then(result => {
       if (result.data.Status) {
-        setCategories(result.data.Result)
+        setJobTitles(result.data.Result)
       } else {
         alert(result.data.Error)
       }
@@ -25,10 +25,10 @@ const Category = () => {
   return (
     <div className="px-5 mt-5 border-dotted border-black border-2 pt-2">
       <div className="flex justify-center">
-        <h3 className="text-2xl font-semibold">Category List</h3>
+        <h3 className="text-2xl font-semibold">Job Title List</h3>
       </div>
-      <Link to='/dashboard/add-category' className=' bg-blue-500 hover:bg-blue-700 text-white font-semibold py-3 px-4 rounded'>
-        Add Category
+      <Link to='/dashboard/add-job-title' className=' bg-blue-500 hover:bg-blue-700 text-white font-semibold py-3 px-4 rounded'>
+        Add Job Title
       </Link>
       <div className="mt-4">
         <table className="min-w-full divide-y divide-gray-200">
@@ -38,10 +38,10 @@ const Category = () => {
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
-            {categories.map((c, i) => {
+            {jobTitles.map((job, i) => {
               return (
                 <tr key={i}>
-                  <td className="px-6 py-4 whitespace-nowrap">{c.name}</td>
+                  <td className="px-6 py-4 whitespace-nowrap">{job.name}</td>
                 </tr>
               )
             })}
@@ -52,4 +52,4 @@ const Category = () => {
   )
 }
 
-export default Category;
+export default JobTitle;

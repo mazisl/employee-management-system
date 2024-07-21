@@ -2,7 +2,7 @@ import { useEmployee } from "../contexts/employee.context";
 
 const AddEmployee = () => {
 
-  const { employee, jobCategory, handleInputChange, handleSelectChange, handleFileChange, handleSubmit } = useEmployee();
+  const { employee, jobTitle, handleInputChange, handleSelectChange, handleFileChange, handleSubmit } = useEmployee();
 
   return (
     <div className="flex items-center justify-center mt-6">
@@ -62,22 +62,22 @@ const AddEmployee = () => {
             ></input>
           </div>
           <div className="mb-4 relative">
-            <label htmlFor="jobType" className="block font-bold mb-2">
-              Job Category
+            <label htmlFor="jobTitle" className="block font-bold mb-2">
+              Job Title
             </label>
             <select
-              id="jobType"
+              id="jobTitle"
               className="inputField cursor-pointer bg-white border-gray-300 py-2 px-4 pr-8 focus"
-              name="category_id"
-              value={employee.category_id}
+              name="job_title_id"
+              value={employee.job_title_id}
               onChange={handleSelectChange}
             >
               <option value="" disabled>
-                Select Job Category
+                Select Job Title
               </option>
-              {jobCategory.map((jobCat) => (
-                <option key={jobCat.ID} value={jobCat.ID}>
-                  {jobCat.name}
+              {jobTitle.map((job) => (
+                <option key={job.ID} value={job.ID}>
+                  {job.name}
                 </option>
               ))}
             </select>

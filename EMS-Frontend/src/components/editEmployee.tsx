@@ -7,17 +7,17 @@ interface TEmployeeDetailsEdit {
   name: string;
   email: string;
   salary: string;
-  category_id: string;
+  job_title_id: string;
 }
 const EditEmployee = () => {
 
-  const {jobCategory, setJobCategory } = useEmployee();
+  const {jobTitle, setJobTitle } = useEmployee();
 
   const [employeeDetails, setEmployeeDetails] = useState<TEmployeeDetailsEdit>({
     name: "",
     email: "",
     salary: "",
-    category_id: ""
+    job_title_id: ""
   });
 
   const navigate = useNavigate();
@@ -25,10 +25,10 @@ const EditEmployee = () => {
   const {id} = useParams();
 
   useEffect(() => {
-    axios.get('http://localhost:3000/auth/category')
+    axios.get('http://localhost:3000/auth/job-title')
     .then(result => {
       if (result.data.Status) {
-        setJobCategory(result.data.Result)
+        setJobTitle(result.data.Result)
       } else {
         alert(result.data.Error)
       }
@@ -38,8 +38,8 @@ const EditEmployee = () => {
     axios.get('http://localhost:3000/auth/employee/'+id)
       .then(result => {
         if (result.data.Status) {
-          const { name, email, salary, category_id } = result.data.Result[0];
-          setEmployeeDetails({ name, email, salary, category_id });
+          const { name, email, salary, job_title_id } = result.data.Result[0];
+          setEmployeeDetails({ name, email, salary, job_title_id });
         } else {
           alert(result.data.Error);
         }
@@ -120,21 +120,21 @@ const EditEmployee = () => {
           </div>
 
           <div className="mb-4 relative">
-            <label htmlFor="jobType" className="block font-bold mb-2">
-              Job Category
+            <label htmlFor="jobTitle" className="block font-bold mb-2">
+              Job Title
             </label>
             <select
-              id="jobType"
+              id="jobTitle"
               className="inputField cursor-pointer bg-white border-gray-300 py-2 px-4 pr-8 focus"
-              name="category_id"
-              value={employeeDetails.category_id}
+              name="job_title_id"
+              value={employeeDetails.job_title_id}
               onChange={handleSelectChange}
             >
               <option value="" disabled>Select Job Category</option>
-              {jobCategory.map((jobCat) => {
+              {jobTitle.map((job) => {
                 return (
-                  <option key={jobCat.ID} value={jobCat.ID}>
-                    {jobCat.name}
+                  <option key={job.ID} value={job.ID}>
+                    {job.name}
                   </option>
                 );
               })}

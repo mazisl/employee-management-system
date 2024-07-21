@@ -49,24 +49,24 @@ const Employee = () => {
         <table className="min-w-full divide-y divide-gray-200">
           <thead className="bg-gray-50">
             <tr>
-              <th className="px-6 py-3 text-left text-sm font-medium text-gray-500 uppercase tracking-wider">Name</th>
-              <th className="px-6 py-3 text-left text-sm font-medium text-gray-500 uppercase tracking-wider">Image</th>
-              <th className="px-6 py-3 text-left text-sm font-medium text-gray-500 uppercase tracking-wider">Email</th>
-              <th className="px-6 py-3 text-left text-sm font-medium text-gray-500 uppercase tracking-wider">Salary</th>
-              <th className="px-6 py-3 text-left text-sm font-medium text-gray-500 uppercase tracking-wider">Action</th>
+              <th className="employee-th">Name</th>
+              <th className="employee-th">Image</th>
+              <th className="employee-th">Email</th>
+              <th className="employee-th">Salary</th>
+              <th className="employee-th">Action</th>
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
             {employees.map((e, i) => {
               return (
                 <tr key={i}>
-                  <td className="px-6 py-4 whitespace-nowrap">{e.name}</td>
-                  <td className="px-6 py-4 whitespace-nowrap">
+                  <td className="employee-td">{e.name}</td>
+                  <td className="employee-td">
                     <img className="w-10 h-10 rounded-full" src={`http://localhost:3000/images/`+ e.image} alt="" />
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap">{e.email}</td>
-                  <td className="px-6 py-4 whitespace-nowrap">{e.salary}</td>
-                  <td className="px-6 py-4 whitespace-nowrap">
+                  <td className="employee-td">{e.email}</td>
+                  <td className="employee-td">{e.salary}</td>
+                  <td className="employee-td">
                     <Link className="py-1 px-3 bg-[#32a893] rounded-lg mr-2" to={`/dashboard/edit-employee/`+e.id}>Edit</Link>
                     <button className="py-1 px-3 bg-[#edd521] rounded-lg" onClick={() => handleDelete(e.id)}>Delete</button>
                   </td>

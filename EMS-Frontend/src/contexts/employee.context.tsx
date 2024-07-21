@@ -2,7 +2,7 @@ import { ReactNode, createContext, useContext, useState, useEffect, ChangeEvent,
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
-interface JCategory {
+interface JTitle {
   name: string;
   ID: number;
 }
@@ -12,15 +12,15 @@ export interface TEmployee {
   email: string;
   password: string;
   salary: string;
-  category_id: string;
+  job_title_id: string;
   image: File | null;
 }
 
 interface EmployeeContextProps {
   employee: TEmployee;
   setEmployee: (value: TEmployee) => void;
-  jobCategory: JCategory[];
-  setJobCategory: Dispatch<SetStateAction<JCategory[]>>;
+  jobTitle: JTitle[];
+  setJobTitle: Dispatch<SetStateAction<JTitle[]>>;
   handleInputChange: (e: ChangeEvent<HTMLInputElement>) => void;
   handleSelectChange: (e: ChangeEvent<HTMLSelectElement>) => void;
   handleFileChange: (e: ChangeEvent<HTMLInputElement>) => void;
@@ -36,20 +36,20 @@ export const EmployeeProvider = ({ children }: {children: ReactNode}) => {
     email: '',
     password: '',
     salary: '',
-    category_id: '',
+    job_title_id: '',
     image: null,
   });
 
-  const [jobCategory, setJobCategory] = useState<JCategory[]>([]);
+  const [jobTitle, setJobTitle] = useState<JTitle[]>([]);
 
   const navigate = useNavigate();
 
   useEffect(() => {
     axios
-      .get('http://localhost:3000/auth/category')
+      .get('http://localhost:3000/auth/job-title')
       .then((result) => {
         if (result.data.Status) {
-          setJobCategory(result.data.Result);
+          setJobTitle(result.data.Result);
         } else {
           alert(result.data.Error);
         }
@@ -80,7 +80,7 @@ export const EmployeeProvider = ({ children }: {children: ReactNode}) => {
     formData.append('email', employee.email);
     formData.append('password', employee.password);
     formData.append('salary', employee.salary);
-    formData.append('category_id', employee.category_id);
+    formData.append('job_title_id', employee.job_title_id);
     if (employee.image) {
       formData.append('image', employee.image);
     }
@@ -93,7 +93,7 @@ export const EmployeeProvider = ({ children }: {children: ReactNode}) => {
             email: '',
             password: '',
             salary: '',
-            category_id: '',
+            job_title_id: '',
             image: null
           });
         } else {
@@ -106,8 +106,8 @@ export const EmployeeProvider = ({ children }: {children: ReactNode}) => {
   const value = {
     employee,
     setEmployee,
-    jobCategory,
-    setJobCategory,
+    jobTitle,
+    setJobTitle,
     handleInputChange, 
     handleSelectChange, 
     handleFileChange, 

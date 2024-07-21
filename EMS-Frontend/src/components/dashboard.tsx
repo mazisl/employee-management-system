@@ -39,9 +39,9 @@ const Dashboard = () => {
                 </Link>
               </li>
               <li className="rounded-lg hover:bg-gray-700">
-                <Link to='/dashboard/category' className='flex items-center space-x-2 p-2'>
+                <Link to='/dashboard/job-title' className='flex items-center space-x-2 p-2'>
                   <FontAwesomeIcon icon={faLayerGroup} />
-                  <span>Category</span>
+                  <span>Job Title</span>
                 </Link>
               </li>
               <li className="rounded-lg hover:bg-gray-700">

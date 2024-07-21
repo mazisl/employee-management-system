@@ -30,17 +30,17 @@ router.post('/admin-login', (req, res) => {
   });
 });
 
-router.get('/category', (req, res) => {
-  const sql = 'SELECT * FROM category';
+router.get('/job-title', (req, res) => {
+  const sql = 'SELECT * FROM job_title';
   dbCon.query(sql, (err, result) => {
     if (err) return res.json({Status: false, Error: 'Query Error'})
     return res.json({Status: true, Result: result})
   })
 })
 
-router.post('/add-category', (req, res) => {
-  const sql = 'INSERT INTO category (`name`) VALUES (?)';
-  dbCon.query(sql, [req.body.category], (err, result) => {
+router.post('/add-job-title', (req, res) => {
+  const sql = 'INSERT INTO job_title (`name`) VALUES (?)';
+  dbCon.query(sql, [req.body.job_title], (err, result) => {
     if (err) return res.json({Status: false, Error: 'Query Error'})
     return res.json({Status: true})
   })
@@ -64,7 +64,7 @@ const upload = multer({
 router.post('/add-employee', upload.single('image'), (req, res) => {
   console.log('Received request body:', req.body)
   const sql = `INSERT INTO employee 
-  (name, email, password, salary, image, category_id)
+  (name, email, password, salary, image, job_title_id)
    VALUES (?)`;
   bcrypt.hash(req.body.password, 10, (err, hash) => {
     if (err) return res.json({Status: false, Error: 'Query Error'})
@@ -74,7 +74,7 @@ router.post('/add-employee', upload.single('image'), (req, res) => {
       hash,
       req.body.salary,
       req.file?.filename,
-      req.body.category_id
+      req.body.job_title_id
     ]
     dbCon.query(sql, [values], (err, result) => {
       if (err) return res.json({Status: false, Error: 'Query Error'})
@@ -102,12 +102,12 @@ router.get('/employee/:id', (req, res) => {
 
 router.put('/edit-employee/:id', (req, res) => {
   const id = req.params.id;
-  const sql = 'UPDATE employee set name = ?, email = ?, salary = ?, category_id = ? WHERE id = ?';
+  const sql = 'UPDATE employee set name = ?, email = ?, salary = ?, job_title_id = ? WHERE id = ?';
   const values = [
     req.body.name,
     req.body.email,
     req.body.salary,
-    req.body.category_id
+    req.body.job_title_id
   ]
   dbCon.query(sql, [...values, id], (err, result) => {
     if (err) return res.json({Status: false, Error: 'Query Error'+err})
