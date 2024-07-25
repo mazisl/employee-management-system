@@ -8,6 +8,9 @@ interface TEmployeeDetailsEdit {
   email: string;
   salary: string;
   job_title_id: string;
+  join_date: string;
+  visa_expiry_date: string;
+  work_permit_expiry_date: string;
 }
 const EditEmployee = () => {
 
@@ -17,7 +20,10 @@ const EditEmployee = () => {
     name: "",
     email: "",
     salary: "",
-    job_title_id: ""
+    job_title_id: "",
+    join_date: "",
+    visa_expiry_date: "",
+    work_permit_expiry_date: ""
   });
 
   const navigate = useNavigate();
@@ -38,8 +44,8 @@ const EditEmployee = () => {
     axios.get('http://localhost:3000/auth/employee/'+id)
       .then(result => {
         if (result.data.Status) {
-          const { name, email, salary, job_title_id } = result.data.Result[0];
-          setEmployeeDetails({ name, email, salary, job_title_id });
+          const { name, email, salary, job_title_id, join_date, visa_expiry_date, work_permit_expiry_date } = result.data.Result[0];
+          setEmployeeDetails({ name, email, salary, job_title_id, join_date, visa_expiry_date, work_permit_expiry_date });
         } else {
           alert(result.data.Error);
         }
@@ -63,7 +69,7 @@ const EditEmployee = () => {
     axios.put('http://localhost:3000/auth/edit-employee/'+id, employeeDetails)
       .then(result => {
         if (result.data.Status) {
-          navigate('/dashboard/employee')
+          navigate('/dashboard/employees')
         } else {
           alert(result.data.Error)
         }
@@ -139,6 +145,48 @@ const EditEmployee = () => {
                 );
               })}
             </select>
+          </div>
+
+          <div className="mb-4">
+            <label htmlFor="join_date" className="block font-bold mb-2">
+              Join Date
+            </label>
+            <input
+              className="inputField focus"
+              type="date"
+              name="join_date"
+              placeholder="Select Join Date"
+              value={employeeDetails.join_date}
+              onChange={handleInputChange}
+            />
+          </div>
+
+          <div className="mb-4">
+            <label htmlFor="visa_expiry_date" className="block font-bold mb-2">
+              Visa Expiry Date
+            </label>
+            <input
+              className="inputField focus"
+              type="date"
+              name="visa_expiry_date"
+              placeholder="Select Visa Expiry Date"
+              value={employeeDetails.visa_expiry_date}
+              onChange={handleInputChange}
+            />
+          </div>
+
+          <div className="mb-4">
+            <label htmlFor="work_permit_expiry_date" className="block font-bold mb-2">
+              Work Permit Expiry Date
+            </label>
+            <input
+              className="inputField focus"
+              type="date"
+              name="work_permit_expiry_date"
+              placeholder="Select Work Permit Expiry Date"
+              value={employeeDetails.work_permit_expiry_date}
+              onChange={handleInputChange}
+            />
           </div>
 
           <button className="btn" type="submit">

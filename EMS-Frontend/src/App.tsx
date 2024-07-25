@@ -3,7 +3,7 @@ import AddEmployee from "./components/addEmployee";
 import JobTitle from "./components/category";
 import Dashboard from "./components/dashboard";
 import EditEmployee from "./components/editEmployee";
-import Employee from "./components/employee";
+import Employees from "./components/employees";
 import Home from "./components/home";
 import Login from "./components/login";
 import Profile from "./components/profile";
@@ -24,7 +24,7 @@ const App = () => {
         <Route path="/employee-detail/:id" element={<PrivateRoute><EmployeeDetail /></PrivateRoute>}></Route>
         <Route path="/dashboard" element={<PrivateRoute><Dashboard/></PrivateRoute> }>
           <Route path="" element={<Home />}></Route>
-          <Route path="/dashboard/employee" element={<Employee />}></Route>
+          <Route path="/dashboard/employees" element={<Employees />}></Route>
           <Route path="/dashboard/job-title" element={<JobTitle />}></Route>
           <Route path="/dashboard/profile" element={<Profile />}></Route>
           <Route path="/dashboard/add-job-title" element={<AddJobTitle />}></Route>

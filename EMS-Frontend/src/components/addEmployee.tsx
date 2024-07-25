@@ -1,8 +1,23 @@
+import { useEffect } from "react";
 import { useEmployee } from "../contexts/employee.context";
 
 const AddEmployee = () => {
 
-  const { employee, jobTitle, handleInputChange, handleSelectChange, handleFileChange, handleSubmit } = useEmployee();
+  const { employee, setEmployee, jobTitle, handleInputChange, handleSelectChange, handleFileChange, handleSubmit } = useEmployee();
+
+  useEffect(() => {
+    setEmployee({
+      name: '',
+      email: '',
+      password: '',
+      salary: '',
+      job_title_id: '',
+      image: null,
+      join_date: '',
+      visa_expiry_date: '',
+      work_permit_expiry_date: ''
+    });
+  }, [])
 
   return (
     <div className="flex items-center justify-center mt-6">
@@ -49,6 +64,19 @@ const AddEmployee = () => {
             ></input>
           </div>
           <div className="mb-4">
+            <label htmlFor="join_date" className="block font-bold mb-2">
+              Join Date
+            </label>
+            <input
+              className="inputField focus"
+              type="date"
+              name="join_date"
+              placeholder="Select Join Date"
+              value={employee.join_date}
+              onChange={handleInputChange}
+            />
+          </div>
+          <div className="mb-4">
             <label htmlFor="salary" className="block font-bold mb-2">
               Salary
             </label>
@@ -81,6 +109,31 @@ const AddEmployee = () => {
                 </option>
               ))}
             </select>
+          </div><div className="mb-4">
+            <label htmlFor="visa_expiry_date" className="block font-bold mb-2">
+              Visa Expiry Date
+            </label>
+            <input
+              className="inputField focus"
+              type="date"
+              name="visa_expiry_date"
+              placeholder="Select Visa Expiry Date"
+              value={employee.visa_expiry_date}
+              onChange={handleInputChange}
+            />
+          </div>
+          <div className="mb-4">
+            <label htmlFor="work_permit_expiry_date" className="block font-bold mb-2">
+              Work Permit Expiry Date
+            </label>
+            <input
+              className="inputField focus"
+              type="date"
+              name="work_permit_expiry_date"
+              placeholder="Select Work Permit Expiry Date"
+              value={employee.work_permit_expiry_date}
+              onChange={handleInputChange}
+            />
           </div>
           <div className="mb-4">
             <label htmlFor="imgFile" className="block font-bold mb-2">

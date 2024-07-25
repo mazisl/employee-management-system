@@ -33,7 +33,7 @@ const Dashboard = () => {
                 </Link>
               </li>
               <li className="rounded-lg hover:bg-gray-700">
-                <Link to='/dashboard/employee' className='flex items-center space-x-2 p-2'>
+                <Link to='/dashboard/employees' className='flex items-center space-x-2 p-2'>
                   <FontAwesomeIcon icon={faUsers} />
                   <span>Manage Employees</span>
                 </Link>

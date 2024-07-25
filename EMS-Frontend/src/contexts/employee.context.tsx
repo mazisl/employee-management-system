@@ -14,6 +14,9 @@ export interface TEmployee {
   salary: string;
   job_title_id: string;
   image: File | null;
+  join_date: string;
+  visa_expiry_date: string;
+  work_permit_expiry_date: string;
 }
 
 interface EmployeeContextProps {
@@ -29,8 +32,7 @@ interface EmployeeContextProps {
 
 const EmployeeContext = createContext<EmployeeContextProps>({} as EmployeeContextProps);
 
-export const EmployeeProvider = ({ children }: {children: ReactNode}) => {
-
+export const EmployeeProvider = ({ children }: { children: ReactNode }) => {
   const [employee, setEmployee] = useState<TEmployee>({
     name: '',
     email: '',
@@ -38,6 +40,9 @@ export const EmployeeProvider = ({ children }: {children: ReactNode}) => {
     salary: '',
     job_title_id: '',
     image: null,
+    join_date: '',
+    visa_expiry_date: '',
+    work_permit_expiry_date: ''
   });
 
   const [jobTitle, setJobTitle] = useState<JTitle[]>([]);
@@ -81,20 +86,26 @@ export const EmployeeProvider = ({ children }: {children: ReactNode}) => {
     formData.append('password', employee.password);
     formData.append('salary', employee.salary);
     formData.append('job_title_id', employee.job_title_id);
+    formData.append('join_date', employee.join_date);
+    formData.append('visa_expiry_date', employee.visa_expiry_date);
+    formData.append('work_permit_expiry_date', employee.work_permit_expiry_date);
     if (employee.image) {
       formData.append('image', employee.image);
     }
     axios.post('http://localhost:3000/auth/add-employee', formData)
       .then(result => {
         if (result.data.Status) {
-          navigate('/dashboard/employee');
+          navigate('/dashboard/employees');
           setEmployee({
             name: '',
             email: '',
             password: '',
             salary: '',
             job_title_id: '',
-            image: null
+            image: null,
+            join_date: '',
+            visa_expiry_date: '',
+            work_permit_expiry_date: ''
           });
         } else {
           alert(result.data.Error);
@@ -108,9 +119,9 @@ export const EmployeeProvider = ({ children }: {children: ReactNode}) => {
     setEmployee,
     jobTitle,
     setJobTitle,
-    handleInputChange, 
-    handleSelectChange, 
-    handleFileChange, 
+    handleInputChange,
+    handleSelectChange,
+    handleFileChange,
     handleSubmit
   }
 

@@ -40,7 +40,7 @@ router.get('/job-title', (req, res) => {
 
 router.post('/add-job-title', (req, res) => {
   const sql = 'INSERT INTO job_title (`name`) VALUES (?)';
-  dbCon.query(sql, [req.body.job_title], (err, result) => {
+  dbCon.query(sql, [req.body.jobTitle], (err, result) => {
     if (err) return res.json({Status: false, Error: 'Query Error'})
     return res.json({Status: true})
   })
@@ -64,7 +64,7 @@ const upload = multer({
 router.post('/add-employee', upload.single('image'), (req, res) => {
   console.log('Received request body:', req.body)
   const sql = `INSERT INTO employee 
-  (name, email, password, salary, image, job_title_id)
+  (name, email, password, salary, image, job_title_id, join_date, visa_expiry_date, work_permit_expiry_date)
    VALUES (?)`;
   bcrypt.hash(req.body.password, 10, (err, hash) => {
     if (err) return res.json({Status: false, Error: 'Query Error'})
@@ -74,7 +74,10 @@ router.post('/add-employee', upload.single('image'), (req, res) => {
       hash,
       req.body.salary,
       req.file?.filename,
-      req.body.job_title_id
+      req.body.job_title_id,
+      req.body.join_date,
+      req.body.visa_expiry_date,
+      req.body.work_permit_expiry_date
     ]
     dbCon.query(sql, [values], (err, result) => {
       if (err) return res.json({Status: false, Error: 'Query Error'})
@@ -102,12 +105,15 @@ router.get('/employee/:id', (req, res) => {
 
 router.put('/edit-employee/:id', (req, res) => {
   const id = req.params.id;
-  const sql = 'UPDATE employee set name = ?, email = ?, salary = ?, job_title_id = ? WHERE id = ?';
+  const sql = 'UPDATE employee set name = ?, email = ?, salary = ?, job_title_id = ?, join_date = ?, visa_expiry_date = ?, work_permit_expiry_date = ? WHERE id = ?';
   const values = [
     req.body.name,
     req.body.email,
     req.body.salary,
-    req.body.job_title_id
+    req.body.job_title_id,
+    req.body.join_date,
+    req.body.visa_expiry_date,
+    req.body.work_permit_expiry_date
   ]
   dbCon.query(sql, [...values, id], (err, result) => {
     if (err) return res.json({Status: false, Error: 'Query Error'+err})
