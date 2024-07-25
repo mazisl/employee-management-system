@@ -28,11 +28,11 @@
   }
 
   .employee-th {
-    @apply px-6 py-3 text-left text-sm font-medium text-gray-500 uppercase tracking-wider;
+    @apply px-5 py-3 text-left text-sm font-medium text-gray-500 uppercase tracking-wider;
   }
 
   .employee-td {
-    @apply px-6 py-4 whitespace-nowrap;
+    @apply px-5 py-4 whitespace-nowrap;
   }
 }
 

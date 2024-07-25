@@ -44,13 +44,13 @@ const Employees = () => {
         }
       })
       .catch(err => console.log(err));
-    }, []);
+  }, []);
 
   const handleDelete = (id: number) => {
     axios.delete(`http://localhost:3000/auth/delete-employee/${id}`)
       .then(result => {
         if (result.data.Status) {
-          window.location.reload()
+          setEmployees(prevEmployees => prevEmployees.filter(employee => employee.id !== id));
         } else {
           alert(result.data.Error)
         }
@@ -61,6 +61,12 @@ const Employees = () => {
   const getJobTitleName = (jobId: number) => {
     const job = jobTitles.find(job => job.ID === jobId);
     return job ? job.name : 'Unknown';
+  };
+
+  // Function to format date string
+  const formatDate = (dateString: string) => {
+    const date = new Date(dateString);
+    return date.toISOString().split('T')[0]; // Formats date as YYYY-MM-DD
   };
   
   return (
@@ -93,11 +99,11 @@ const Employees = () => {
                   <td className="employee-td">
                     <img className="w-10 h-10 rounded-full" src={`http://localhost:3000/images/`+ e.image} alt="" />
                   </td>
-                  <td className="employee-td">{e.join_date}</td>
+                  <td className="employee-td">{formatDate(e.join_date)}</td>
                   <td className="employee-td">{getJobTitleName(e.job_title_id)}</td>
                   <td className="employee-td">{e.salary}</td>
-                  <td className="employee-td">{e.visa_expiry_date}</td>
-                  <td className="employee-td">{e.work_permit_expiry_date}</td>
+                  <td className="employee-td">{formatDate(e.visa_expiry_date)}</td>
+                  <td className="employee-td">{formatDate(e.work_permit_expiry_date)}</td>
                   <td className="employee-td">
                     <Link className="py-1 px-3 bg-[#32a893] rounded-lg mr-2" to={`/dashboard/edit-employee/`+e.id}>Edit</Link>
                     <button className="py-1 px-3 bg-[#edd521] rounded-lg" onClick={() => handleDelete(e.id)}>Delete</button>
