@@ -1,6 +1,7 @@
 import axios from "axios"
 import { useEffect, useState } from "react"
 import { Link } from "react-router-dom"
+import ConfirmationDialog from "./confirmationDialog"
 
 interface JobTitle {
   ID: number;
@@ -23,6 +24,8 @@ const Employees = () => {
 
   const [employees, setEmployees] = useState<Employee[]>([]);
   const [jobTitles, setJobTitles] = useState<JobTitle[]>([]);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [employeeToDelete, setEmployeeToDelete] = useState<number | null>(null);
 
   useEffect(() => {
     axios.get('http://localhost:3000/auth/employee')
@@ -46,16 +49,30 @@ const Employees = () => {
       .catch(err => console.log(err));
   }, []);
 
-  const handleDelete = (id: number) => {
-    axios.delete(`http://localhost:3000/auth/delete-employee/${id}`)
-      .then(result => {
-        if (result.data.Status) {
-          setEmployees(prevEmployees => prevEmployees.filter(employee => employee.id !== id));
-        } else {
-          alert(result.data.Error)
-        }
-      })
-  }
+  const handleOpenDialog = (id: number) => {
+    setEmployeeToDelete(id);
+    setIsDialogOpen(true);
+  };
+
+  const handleCloseDialog = () => {
+    setIsDialogOpen(false);
+    setEmployeeToDelete(null);
+  };
+
+  const handleDelete = () => {
+    if (employeeToDelete !== null) {
+      axios.delete(`http://localhost:3000/auth/delete-employee/${employeeToDelete}`)
+        .then(result => {
+          if (result.data.Status) {
+            setEmployees(prevEmployees => prevEmployees.filter(employee => employee.id !== employeeToDelete));
+          } else {
+            alert(result.data.Error);
+          }
+          handleCloseDialog();
+        })
+        .catch(err => console.log(err));
+    }
+  };
 
   // Function to get job title name by ID
   const getJobTitleName = (jobId: number) => {
@@ -106,7 +123,7 @@ const Employees = () => {
                   <td className="employee-td">{formatDate(e.work_permit_expiry_date)}</td>
                   <td className="employee-td">
                     <Link className="py-1 px-3 bg-[#32a893] rounded-lg mr-2" to={`/dashboard/edit-employee/`+e.id}>Edit</Link>
-                    <button className="py-1 px-3 bg-[#edd521] rounded-lg" onClick={() => handleDelete(e.id)}>Delete</button>
+                    <button className="py-1 px-3 bg-[#edd521] rounded-lg" onClick={() => handleOpenDialog(e.id)}>Delete</button>
                   </td>
                 </tr>
               )
@@ -114,6 +131,7 @@ const Employees = () => {
           </tbody>
         </table>
       </div>
+      <ConfirmationDialog isOpen={isDialogOpen} onClose={handleCloseDialog} onConfirm={handleDelete}/>
     </div>
   )
 }
