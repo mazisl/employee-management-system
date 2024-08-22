@@ -10,8 +10,10 @@ interface TEmployeeDetailsEdit {
   job_title_id: string;
   join_date: string;
   visa_expiry_date: string;
+  mohre_id: string;
   work_permit_expiry_date: string;
 }
+
 const EditEmployee = () => {
 
   const {jobTitle, setJobTitle } = useEmployee();
@@ -23,6 +25,7 @@ const EditEmployee = () => {
     job_title_id: "",
     join_date: "",
     visa_expiry_date: "",
+    mohre_id: "",
     work_permit_expiry_date: ""
   });
 
@@ -44,8 +47,8 @@ const EditEmployee = () => {
     axios.get('http://localhost:3000/auth/employee/'+id)
       .then(result => {
         if (result.data.Status) {
-          const { name, email, salary, job_title_id, join_date, visa_expiry_date, work_permit_expiry_date } = result.data.Result[0];
-          setEmployeeDetails({ name, email, salary, job_title_id, join_date, visa_expiry_date, work_permit_expiry_date });
+          const { name, email, salary, job_title_id, join_date, visa_expiry_date, mohre_id, work_permit_expiry_date } = result.data.Result[0];
+          setEmployeeDetails({ name, email, salary, job_title_id, join_date, visa_expiry_date, mohre_id, work_permit_expiry_date });
         } else {
           alert(result.data.Error);
         }
@@ -173,6 +176,20 @@ const EditEmployee = () => {
               value={employeeDetails.visa_expiry_date}
               onChange={handleInputChange}
             />
+          </div>
+
+          <div className="mb-4">
+            <label htmlFor="mohre_id" className="block font-bold mb-2">
+              MOHRE ID
+            </label>
+            <input
+              className="inputField focus"
+              type="text"
+              name="mohre_id"
+              placeholder="Enter MOHRE ID number"
+              value={employeeDetails.mohre_id}
+              onChange={handleInputChange}
+            ></input>
           </div>
 
           <div className="mb-4">

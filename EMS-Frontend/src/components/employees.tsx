@@ -16,6 +16,7 @@ interface Employee {
   salary: string;
   join_date: string;
   visa_expiry_date: string;
+  mohre_id: string;
   work_permit_expiry_date: string;
   job_title_id: number;
 }
@@ -81,10 +82,19 @@ const Employees = () => {
   };
 
   // Function to format date string
+  // const formatDate = (dateString: string) => {
+  //   const date = new Date(dateString);
+  //   return date.toISOString().split('T')[0];
+  // };
+
   const formatDate = (dateString: string) => {
+    // Parse the date string
     const date = new Date(dateString);
-    return date.toISOString().split('T')[0]; // Formats date as YYYY-MM-DD
+    // Adjust to local timezone if necessary
+    const localDate = new Date(date.getTime() - date.getTimezoneOffset() * 60000);
+    return localDate.toISOString().split('T')[0]; // YYYY-MM-DD
   };
+  
   
   return (
     <div className="px-5 mt-5 border-dotted border-black border-2 pt-2">
@@ -104,6 +114,7 @@ const Employees = () => {
               <th className="employee-th">Position</th>
               <th className="employee-th">Salary</th>
               <th className="employee-th">Visa Expiry</th>
+              <th className="employee-th">MOHRE ID</th>
               <th className="employee-th">Work Permit Expiry</th>
               <th className="employee-th">Action</th>
             </tr>
@@ -120,6 +131,7 @@ const Employees = () => {
                   <td className="employee-td">{getJobTitleName(e.job_title_id)}</td>
                   <td className="employee-td">{e.salary}</td>
                   <td className="employee-td">{formatDate(e.visa_expiry_date)}</td>
+                  <td className="employee-td">{e.mohre_id}</td>
                   <td className="employee-td">{formatDate(e.work_permit_expiry_date)}</td>
                   <td className="employee-td">
                     <Link className="py-1 px-3 bg-[#32a893] rounded-lg mr-2" to={`/dashboard/edit-employee/`+e.id}>Edit</Link>

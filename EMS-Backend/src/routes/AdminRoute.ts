@@ -64,7 +64,7 @@ const upload = multer({
 router.post('/add-employee', upload.single('image'), (req, res) => {
   console.log('Received request body:', req.body)
   const sql = `INSERT INTO employee 
-  (name, email, password, salary, image, job_title_id, join_date, visa_expiry_date, work_permit_expiry_date)
+  (name, email, password, salary, image, job_title_id, join_date, visa_expiry_date, mohre_id, work_permit_expiry_date)
    VALUES (?)`;
   bcrypt.hash(req.body.password, 10, (err, hash) => {
     if (err) return res.json({Status: false, Error: 'Query Error'})
@@ -77,6 +77,7 @@ router.post('/add-employee', upload.single('image'), (req, res) => {
       req.body.job_title_id,
       req.body.join_date,
       req.body.visa_expiry_date,
+      req.body.mohre_id,
       req.body.work_permit_expiry_date
     ]
     dbCon.query(sql, [values], (err, result) => {
@@ -105,7 +106,7 @@ router.get('/employee/:id', (req, res) => {
 
 router.put('/edit-employee/:id', (req, res) => {
   const id = req.params.id;
-  const sql = 'UPDATE employee set name = ?, email = ?, salary = ?, job_title_id = ?, join_date = ?, visa_expiry_date = ?, work_permit_expiry_date = ? WHERE id = ?';
+  const sql = 'UPDATE employee set name = ?, email = ?, salary = ?, job_title_id = ?, join_date = ?, visa_expiry_date = ?, mohre_id = ?, work_permit_expiry_date = ? WHERE id = ?';
   const values = [
     req.body.name,
     req.body.email,
@@ -113,6 +114,7 @@ router.put('/edit-employee/:id', (req, res) => {
     req.body.job_title_id,
     req.body.join_date,
     req.body.visa_expiry_date,
+    req.body.mohre_id,
     req.body.work_permit_expiry_date
   ]
   dbCon.query(sql, [...values, id], (err, result) => {

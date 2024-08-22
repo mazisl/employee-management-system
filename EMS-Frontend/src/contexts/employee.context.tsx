@@ -16,6 +16,7 @@ export interface TEmployee {
   image: File | null;
   join_date: string;
   visa_expiry_date: string;
+  mohre_id: string;
   work_permit_expiry_date: string;
 }
 
@@ -42,6 +43,7 @@ export const EmployeeProvider = ({ children }: { children: ReactNode }) => {
     image: null,
     join_date: '',
     visa_expiry_date: '',
+    mohre_id: '',
     work_permit_expiry_date: ''
   });
 
@@ -88,6 +90,7 @@ export const EmployeeProvider = ({ children }: { children: ReactNode }) => {
     formData.append('job_title_id', employee.job_title_id);
     formData.append('join_date', employee.join_date);
     formData.append('visa_expiry_date', employee.visa_expiry_date);
+    formData.append('mohre_id', employee.mohre_id);
     formData.append('work_permit_expiry_date', employee.work_permit_expiry_date);
     if (employee.image) {
       formData.append('image', employee.image);
@@ -105,6 +108,7 @@ export const EmployeeProvider = ({ children }: { children: ReactNode }) => {
             image: null,
             join_date: '',
             visa_expiry_date: '',
+            mohre_id: '',
             work_permit_expiry_date: ''
           });
         } else {

@@ -15,6 +15,7 @@ const AddEmployee = () => {
       image: null,
       join_date: '',
       visa_expiry_date: '',
+      mohre_id: '',
       work_permit_expiry_date: ''
     });
   }, [])
@@ -119,6 +120,19 @@ const AddEmployee = () => {
               name="visa_expiry_date"
               placeholder="Select Visa Expiry Date"
               value={employee.visa_expiry_date}
+              onChange={handleInputChange}
+            />
+          </div>
+          <div className="mb-4">
+            <label htmlFor="mohre_id" className="block font-bold mb-2">
+              MOHRE ID
+            </label>
+            <input
+              className="inputField focus"
+              type="text"
+              name="mohre_id"
+              placeholder="MOHRE Personal ID"
+              value={employee.mohre_id}
               onChange={handleInputChange}
             />
           </div>

@@ -39,6 +39,7 @@ const EmployeeDetail = () => {
                 <h3>Name: {employee.name}</h3>
                 <h3>Email: {employee.email}</h3>
                 <h3>Salary: ${employee.salary}</h3>
+                <h3>MOHRE ID: ${employee.mohre_id}</h3>
             </div>
             <div className="flex mt-4">
                 <button className="btn mr-2">Edit</button>
