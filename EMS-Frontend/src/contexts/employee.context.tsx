@@ -29,6 +29,7 @@ interface EmployeeContextProps {
   handleSelectChange: (e: ChangeEvent<HTMLSelectElement>) => void;
   handleFileChange: (e: ChangeEvent<HTMLInputElement>) => void;
   handleSubmit: (e: FormEvent<HTMLFormElement>) => void;
+  formatDate: (dateString: string) => string;
 }
 
 const EmployeeContext = createContext<EmployeeContextProps>({} as EmployeeContextProps);
@@ -118,6 +119,14 @@ export const EmployeeProvider = ({ children }: { children: ReactNode }) => {
       .catch(err => console.log(err));
   };
 
+  const formatDate = (dateString: string) => {
+    // Parse the date string
+    const date = new Date(dateString);
+    // Adjust to local timezone if necessary
+    const localDate = new Date(date.getTime() - date.getTimezoneOffset() * 60000);
+    return localDate.toISOString().split('T')[0]; // YYYY-MM-DD
+  };
+
   const value = {
     employee,
     setEmployee,
@@ -126,7 +135,8 @@ export const EmployeeProvider = ({ children }: { children: ReactNode }) => {
     handleInputChange,
     handleSelectChange,
     handleFileChange,
-    handleSubmit
+    handleSubmit,
+    formatDate
   }
 
   return (

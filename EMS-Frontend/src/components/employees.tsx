@@ -2,6 +2,7 @@ import axios from "axios"
 import { useEffect, useState } from "react"
 import { Link } from "react-router-dom"
 import ConfirmationDialog from "./confirmationDialog"
+import { useEmployee } from "../contexts/employee.context"
 
 interface JobTitle {
   ID: number;
@@ -22,6 +23,8 @@ interface Employee {
 }
 
 const Employees = () => {
+
+  const {formatDate} = useEmployee();
 
   const [employees, setEmployees] = useState<Employee[]>([]);
   const [jobTitles, setJobTitles] = useState<JobTitle[]>([]);
@@ -79,22 +82,7 @@ const Employees = () => {
   const getJobTitleName = (jobId: number) => {
     const job = jobTitles.find(job => job.ID === jobId);
     return job ? job.name : 'Unknown';
-  };
-
-  // Function to format date string
-  // const formatDate = (dateString: string) => {
-  //   const date = new Date(dateString);
-  //   return date.toISOString().split('T')[0];
-  // };
-
-  const formatDate = (dateString: string) => {
-    // Parse the date string
-    const date = new Date(dateString);
-    // Adjust to local timezone if necessary
-    const localDate = new Date(date.getTime() - date.getTimezoneOffset() * 60000);
-    return localDate.toISOString().split('T')[0]; // YYYY-MM-DD
-  };
-  
+  };  
   
   return (
     <div className="px-5 mt-5 border-dotted border-black border-2 pt-2">
